@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusMaster - Plateforme Universitaire</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            color: #212529;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ==================== LANDING PAGE ==================== */
+        .landing {
+            min-height: 100vh;
+            background: #003366;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .landing::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -250px;
+            right: -250px;
+        }
+
+        .landing::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            bottom: -150px;
+            left: -150px;
+        }
+
+        .landing-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 1200px;
+        }
+
+        .landing-logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .landing-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .landing-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 3rem;
+        }
+
+        .portals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .portal-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #003366;
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .portal-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .portal-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .portal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.5rem;
+        }
+
+        .portal-desc {
+            color: #6c757d;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .portal-badge {
+            display: inline-block;
+            background: #e9ecef;
+            color: #495057;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        /* ==================== APP LAYOUT ==================== */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: #2c3e50;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            background: #003366;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .user-info {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 1.5rem 0;
+        }
+
+        .nav-section {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 1.5rem;
+            margin: 1.5rem 0 0.75rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 0;
+            background: #003366;
+            transition: height 0.2s;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-link.active::before {
+            height: 40px;
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: #e74c3c;
+            color: white;
+            padding: 0.125rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #003366;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: #005599;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 0.625rem 1rem 0.625rem 2.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            width: 300px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #003366;
+            box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: #e9ecef;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #003366;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        /* Dashboard Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 51, 102, 0.1);
+            border-radius: 0 0 0 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.blue {
+            background: rgba(0, 51, 102, 0.1);
+        }
+
+        .stat-icon.green {
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .stat-icon.orange {
+            background: rgba(255, 193, 7, 0.1);
+        }
+
+        .stat-icon.red {
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #212529;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .trend-up {
+            color: #28a745;
+        }
+
+        .trend-down {
+            color: #dc3545;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #003366;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #005599;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 51, 102, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #003366;
+            color: #003366;
+        }
+
+        .btn-outline:hover {
+            background: #003366;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            color: #212529;
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-primary {
+            background: rgba(0, 51, 102, 0.15);
+            color: #003366;
+        }
+
+        /* Assignment Card */
+        .assignment-card {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .assignment-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .assignment-card.urgent {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .assignment-card.pending {
+            border-color: #ffc107;
+            background: #fffef5;
+        }
+
+        .assignment-card.completed {
+            border-color: #28a745;
+            background: #f5fff8;
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+
+        .assignment-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #212529;
+        }
+
+        .assignment-course {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .assignment-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Course Card */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .course-header {
+            padding: 1.5rem;
+            background: #003366;
+            color: white;
+        }
+
+        .course-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .course-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-code {
+            opacity: 0.9;
+            font-size: 0.85rem;
+        }
+
+        .course-body {
+            padding: 1.5rem;
+        }
+
+        .course-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 2px solid #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #212529;
+        }
+
+        .modal-close {
+            width: 35px;
+            height: 35px;
+            border: none;
+            background: #f8f9fa;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.2s;
+            color: #6c757d;
+        }
+
+        .modal-close:hover {
+            background: #e9ecef;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 2px solid #f8f9fa;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #003366;
+            box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.1);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        .file-upload {
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-upload:hover {
+            border-color: #003366;
+            background: rgba(0, 51, 102, 0.05);
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #6c757d;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+            animation: slideInRight 0.3s;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-success {
+            border-left: 4px solid #28a745;
+        }
+
+        .toast-error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .toast-info {
+            border-left: 4px solid #17a2b8;
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast-message {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #003366;
+            color: white;
+            border: none;
+            font-size: 1.75rem;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 51, 102, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 12px 30px rgba(0, 51, 102, 0.6);
+            background: #005599;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-grid,
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-input {
+                width: 200px;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #495057;
+        }
+
+        /* Progress Bar */
+        .progress {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #003366;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+<!-- ==================== LANDING PAGE ==================== -->
+<div id="landing" class="landing">
+    <div class="landing-content">
+        <div class="landing-logo">🎓</div>
+        <h1 class="landing-title">CampusMaster</h1>
+        <p class="landing-subtitle">Plateforme de Gestion Universitaire - Prototype IHM</p>
+
+        <div class="portals-grid">
+            <div class="portal-card" onclick="loadPortal('student')">
+                <span class="portal-icon">👨‍🎓</span>
+                <h3 class="portal-title">Portail Étudiant</h3>
+                <p class="portal-desc">Accédez à vos cours, gérez vos devoirs et consultez vos notes en temps réel.</p>
+                <span class="portal-badge">342 étudiants</span>
+            </div>
+
+            <div class="portal-card" onclick="loadPortal('teacher')">
+                <span class="portal-icon">👨‍🏫</span>
+                <h3 class="portal-title">Portail Enseignant</h3>
+                <p class="portal-desc">Créez des cours, corrigez les travaux et suivez la progression de vos étudiants.</p>
+                <span class="portal-badge">28 enseignants</span>
+            </div>
+
+            <div class="portal-card" onclick="loadPortal('admin')">
+                <span class="portal-icon">👨‍💼</span>
+                <h3 class="portal-title">Portail Administrateur</h3>
+                <p class="portal-desc">Gérez les utilisateurs, départements et consultez les statistiques globales.</p>
+                <span class="portal-badge">4 départements</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== APP CONTAINER ==================== -->
+<div id="app" class="app-container hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="#" onclick="backHome(); return false;" class="logo">
+                <div class="logo-icon">🎓</div>
+                <span>CampusMaster</span>
+            </a>
+            <div class="user-info" id="userInfo"></div>
+        </div>
+
+        <nav>
+            <ul class="nav-menu" id="navMenu"></ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="header">
+            <div class="breadcrumb" id="breadcrumb">
+                <a href="#" onclick="backHome(); return false;">🏠 Accueil</a>
+                <span>›</span>
+                <span id="currentPage">Tableau de bord</span>
+            </div>
+
+            <div class="header-actions">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Rechercher...">
+                </div>
+                <button class="icon-btn">
+                    <span>🔔</span>
+                    <span class="notification-badge" id="notifBadge">3</span>
+                </button>
+                <div class="avatar" id="userAvatar">MS</div>
+            </div>
+        </header>
+
+        <div class="content" id="mainContent"></div>
+    </main>
+</div>
+
+<!-- FAB Button -->
+<button id="fab" class="fab hidden" onclick="openModal('newCourseModal')">+</button>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Modal Soumission Devoir -->
+<div id="submitModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('submitModal')">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">📝 Soumettre mon devoir</h3>
+            <button class="modal-close" onclick="closeModal('submitModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Fichier à soumettre *</label>
+                <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                    <div class="file-upload-icon">📁</div>
+                    <p><strong>Glissez-déposez votre fichier ici</strong></p>
+                    <p style="color: #6c757d; font-size: 0.875rem;">ou cliquez pour parcourir</p>
+                    <p style="color: #6c757d; font-size: 0.8rem; margin-top: 0.5rem;">PDF, DOCX, ZIP (max 50 Mo)</p>
+                </div>
+                <input type="file" id="fileInput" style="display: none;">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Commentaire (optionnel)</label>
+                <textarea class="form-control" placeholder="Ajoutez un commentaire sur votre travail..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('submitModal')">Annuler</button>
+            <button class="btn btn-primary" onclick="submitWork()">✓ Soumettre le devoir</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nouveau Cours -->
+<div id="newCourseModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('newCourseModal')">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">📚 Créer un nouveau cours</h3>
+            <button class="modal-close" onclick="closeModal('newCourseModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Titre du cours *</label>
+                <input type="text" class="form-control" placeholder="Ex: Architecture des Systèmes d'Information">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Code du cours *</label>
+                <input type="text" class="form-control" placeholder="Ex: ARCHI-M2-S2">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" placeholder="Décrivez le contenu du cours..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Module</label>
+                <select class="form-control">
+                    <option>Sélectionner un module</option>
+                    <option>Interface Homme-Machine</option>
+                    <option>Technologies Web</option>
+                    <option>DevOps & Cloud</option>
+                    <option>Sécurité Informatique</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nombre de crédits ECTS</label>
+                <input type="number" class="form-control" value="4" min="1" max="10">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('newCourseModal')">Annuler</button>
+            <button class="btn btn-primary" onclick="createCourse()">✓ Créer le cours</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nouvel Utilisateur -->
+<div id="newUserModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('newUserModal')">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">👤 Ajouter un utilisateur</h3>
+            <button class="modal-close" onclick="closeModal('newUserModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Nom complet *</label>
+                <input type="text" class="form-control" placeholder="Ex: Fatou Sarr">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-control" placeholder="fatou.sarr@etu.uchk.sn">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Rôle *</label>
+                <select class="form-control">
+                    <option>Étudiant</option>
+                    <option>Enseignant</option>
+                    <option>Administrateur</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Département</label>
+                <select class="form-control">
+                    <option>Informatique</option>
+                    <option>Mathématiques</option>
+                    <option>Physique</option>
+                    <option>Chimie</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('newUserModal')">Annuler</button>
+            <button class="btn btn-primary" onclick="createUser()">✓ Créer l'utilisateur</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nouveau Département -->
+<div id="newDeptModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('newDeptModal')">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">🏢 Créer un département</h3>
+            <button class="modal-close" onclick="closeModal('newDeptModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Nom du département *</label>
+                <input type="text" class="form-control" placeholder="Ex: Génie Civil">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Code</label>
+                <input type="text" class="form-control" placeholder="Ex: GC">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Responsable</label>
+                <select class="form-control">
+                    <option>Sélectionner un enseignant</option>
+                    <option>Pr. Diagne</option>
+                    <option>Dr. Kane</option>
+                    <option>Dr. Mbaye</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" placeholder="Description du département..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('newDeptModal')">Annuler</button>
+            <button class="btn btn-primary" onclick="createDept()">✓ Créer le département</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+    // ==================== STATE MANAGEMENT ====================
+    let currentPortal = null;
+    let currentPage = 'dashboard';
+
+    // ==================== NAVIGATION ====================
+    function loadPortal(portal) {
+        currentPortal = portal;
+        currentPage = 'dashboard';
+
+        document.getElementById('landing').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        document.getElementById('fab').classList.toggle('hidden', portal !== 'teacher');
+
+        setupUser(portal);
+        setupNavigation(portal);
+        loadPage('dashboard');
+
+        const welcomeMessages = {
+            student: '👋 Bienvenue Mariama ! Vous avez 3 devoirs à rendre.',
+            teacher: '👋 Bienvenue Pr. Diagne ! 12 devoirs en attente de correction.',
+            admin: '👋 Bienvenue Aïda ! Système opérationnel à 100%.'
+        };
+
+        showToast(welcomeMessages[portal], 'success');
+    }
+
+    function backHome() {
+        document.getElementById('app').classList.add('hidden');
+        document.getElementById('fab').classList.add('hidden');
+        document.getElementById('landing').classList.remove('hidden');
+        currentPortal = null;
+    }
+
+    function setupUser(portal) {
+        const users = {
+            student: { name: 'Mariama Seck', role: 'Étudiante M2 GL', avatar: 'MS', notif: 3 },
+            teacher: { name: 'Pr. Ibrahima Diagne', role: 'Enseignant-Chercheur', avatar: 'ID', notif: 5 },
+            admin: { name: 'Aïda Niang', role: 'Gestionnaire', avatar: 'AN', notif: 2 }
+        };
+
+        const user = users[portal];
+        document.getElementById('userInfo').innerHTML = `
+                <div class="user-name">${user.name}</div>
+                <div class="user-role">${user.role}</div>
+            `;
+        document.getElementById('userAvatar').textContent = user.avatar;
+        document.getElementById('notifBadge').textContent = user.notif;
+    }
+
+    function setupNavigation(portal) {
+        const menus = {
+            student: [
+                { section: 'Principal', items: [
+                        { id: 'dashboard', label: 'Tableau de bord', icon: '📊' },
+                        { id: 'courses', label: 'Mes cours', icon: '📚' },
+                        { id: 'assignments', label: 'Mes devoirs', icon: '📝', badge: 3 },
+                        { id: 'grades', label: 'Mes notes', icon: '🎯' }
+                    ]}
+            ],
+            teacher: [
+                { section: 'Enseignement', items: [
+                        { id: 'dashboard', label: 'Tableau de bord', icon: '📊' },
+                        { id: 'courses', label: 'Mes cours', icon: '📚' },
+                        { id: 'corrections', label: 'Corrections', icon: '✏️', badge: 12 },
+                        { id: 'students', label: 'Étudiants', icon: '👥' }
+                    ]}
+            ],
+            admin: [
+                { section: 'Administration', items: [
+                        { id: 'dashboard', label: 'Tableau de bord', icon: '📊' },
+                        { id: 'users', label: 'Utilisateurs', icon: '👤' },
+                        { id: 'departments', label: 'Départements', icon: '🏢' },
+                        { id: 'stats', label: 'Statistiques', icon: '📈' }
+                    ]}
+            ]
+        };
+
+        const nav = document.getElementById('navMenu');
+        nav.innerHTML = menus[portal].map(section => `
+                <div class="nav-section">${section.section}</div>
+                ${section.items.map(item => `
+                    <li class="nav-item">
+                        <a href="#" class="nav-link ${item.id === 'dashboard' ? 'active' : ''}"
+                           onclick="loadPage('${item.id}'); return false;">
+                            <span class="nav-icon">${item.icon}</span>
+                            <span>${item.label}</span>
+                            ${item.badge ? `<span class="nav-badge">${item.badge}</span>` : ''}
+                        </a>
+                    </li>
+                `).join('')}
+            `).join('');
+    }
+
+    function loadPage(page) {
+        currentPage = page;
+
+        // Update active nav
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('onclick').includes(`'${page}'`)) {
+                link.classList.add('active');
+            }
+        });
+
+        // Update breadcrumb
+        const pageNames = {
+            dashboard: 'Tableau de bord',
+            courses: 'Mes cours',
+            assignments: 'Mes devoirs',
+            grades: 'Mes notes',
+            corrections: 'Corrections',
+            students: 'Étudiants',
+            users: 'Utilisateurs',
+            departments: 'Départements',
+            stats: 'Statistiques'
+        };
+        document.getElementById('currentPage').textContent = pageNames[page];
+
+        // Load content
+        const content = document.getElementById('mainContent');
+
+        if (currentPortal === 'student') {
+            content.innerHTML = getStudentContent(page);
+        } else if (currentPortal === 'teacher') {
+            content.innerHTML = getTeacherContent(page);
+        } else if (currentPortal === 'admin') {
+            content.innerHTML = getAdminContent(page);
+        }
+    }
+
+    // ==================== STUDENT CONTENT ====================
+    function getStudentContent(page) {
+        if (page === 'dashboard') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Tableau de bord</h1>
+                        <p class="page-subtitle">Vue d'ensemble de votre activité académique</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">3</div>
+                                    <div class="stat-label">Devoirs à rendre</div>
+                                </div>
+                                <div class="stat-icon red">📝</div>
+                            </div>
+                            <div class="stat-trend trend-up">⬆ 2 urgent</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">6</div>
+                                    <div class="stat-label">Cours suivis</div>
+                                </div>
+                                <div class="stat-icon blue">📚</div>
+                            </div>
+                            <div class="stat-trend">24 crédits ECTS</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">15.8</div>
+                                    <div class="stat-label">Moyenne générale</div>
+                                </div>
+                                <div class="stat-icon green">🎯</div>
+                            </div>
+                            <div class="stat-trend trend-up">⬆ +0.5 points</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Devoirs à rendre</h2>
+                            <button class="btn btn-outline btn-sm" onclick="loadPage('assignments')">Voir tout</button>
+                        </div>
+
+                        <div class="assignment-card urgent">
+                            <div class="assignment-header">
+                                <div>
+                                    <div class="assignment-title">IHM - Conception de maquettes</div>
+                                    <div class="assignment-course">Interface Homme-Machine</div>
+                                </div>
+                                <span class="badge badge-danger">Urgent</span>
+                            </div>
+                            <div class="assignment-meta">
+                                <span>⏰ Date limite: 20 février 2026 à 23h59</span>
+                                <span>📌 Reste: 2 jours</span>
+                            </div>
+                            <div class="assignment-actions">
+                                <button class="btn btn-primary btn-sm" onclick="openModal('submitModal')">Soumettre mon travail</button>
+                                <button class="btn btn-outline btn-sm" onclick="showToast('📄 Téléchargement des consignes...', 'info')">Voir consignes</button>
+                            </div>
+                        </div>
+
+                        <div class="assignment-card pending">
+                            <div class="assignment-header">
+                                <div>
+                                    <div class="assignment-title">Projet Spring Boot - Phase 2</div>
+                                    <div class="assignment-course">Technologies Web Avancées</div>
+                                </div>
+                                <span class="badge badge-warning">À rendre</span>
+                            </div>
+                            <div class="assignment-meta">
+                                <span>⏰ Date limite: 23 février 2026</span>
+                                <span>📌 Reste: 5 jours</span>
+                            </div>
+                            <div class="assignment-actions">
+                                <button class="btn btn-outline btn-sm" onclick="showToast('📄 Consignes du projet', 'info')">Voir consignes</button>
+                            </div>
+                        </div>
+
+                        <div class="assignment-card completed">
+                            <div class="assignment-header">
+                                <div>
+                                    <div class="assignment-title">TP Docker & Kubernetes</div>
+                                    <div class="assignment-course">DevOps & Cloud Computing</div>
+                                </div>
+                                <span class="badge badge-success">Rendu ✓</span>
+                            </div>
+                            <div class="assignment-meta">
+                                <span>✅ Soumis le: 15 février 2026</span>
+                                <span>⏳ En attente de correction</span>
+                            </div>
+                            <div class="assignment-actions">
+                                <button class="btn btn-outline btn-sm" onclick="showToast('Devoir soumis le 15/02 à 18:23', 'info')">Voir détails</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        } else if (page === 'courses') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Mes Cours</h1>
+                        <p class="page-subtitle">6 cours - 24 crédits ECTS</p>
+                    </div>
+
+                    <div class="course-grid">
+                        ${[
+                { icon: '💻', title: 'Interface Homme-Machine', code: 'IHM-M2', prof: 'Pr. Djidiack FAYE', students: 22, resources: 8, assignments: 3 },
+                { icon: '🌐', title: 'Technologies Web Avancées', code: 'WEB-M2', prof: 'Dr. Mbaye', students: 28, resources: 12, assignments: 4 },
+                { icon: '🔧', title: 'DevOps & Cloud Computing', code: 'DEV-M2', prof: 'M. Sarr', students: 15, resources: 10, assignments: 2 },
+                { icon: '🔒', title: 'Sécurité Informatique', code: 'SEC-M2', prof: 'Dr. Diop', students: 20, resources: 6, assignments: 2 },
+                { icon: '🏗️', title: 'Architecture Logicielle', code: 'ARCHI-M2', prof: 'Pr. Ndiaye', students: 25, resources: 9, assignments: 3 },
+                { icon: '🤖', title: 'Intelligence Artificielle', code: 'IA-M2', prof: 'Dr. Kane', students: 18, resources: 7, assignments: 2 }
+            ].map(course => `
+                            <div class="course-card" onclick="showToast('📚 Ouverture du cours ${course.title}', 'info')">
+                                <div class="course-header">
+                                    <div class="course-icon">${course.icon}</div>
+                                    <div class="course-title">${course.title}</div>
+                                    <div class="course-code">${course.code}</div>
+                                </div>
+                                <div class="course-body">
+                                    <p style="color: #6c757d; margin-bottom: 1rem;">${course.prof} • 4 crédits</p>
+                                    <div class="course-stats">
+                                        <div class="course-stat">
+                                            <span>👥</span>
+                                            <span>${course.students}</span>
+                                        </div>
+                                        <div class="course-stat">
+                                            <span>📄</span>
+                                            <span>${course.resources} ressources</span>
+                                        </div>
+                                        <div class="course-stat">
+                                            <span>📝</span>
+                                            <span>${course.assignments} devoirs</span>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); showToast('📥 Téléchargement...', 'info')" style="flex: 1;">Ressources</button>
+                                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); loadPage('assignments')" style="flex: 1;">Devoirs</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+        } else if (page === 'assignments') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Mes Devoirs</h1>
+                        <p class="page-subtitle">Gérez vos travaux et soumissions</p>
+                    </div>
+
+                    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="stat-card">
+                            <div class="stat-icon red">⏰</div>
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">À rendre</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">✓</div>
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Rendus</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon blue">📊</div>
+                            <div class="stat-value">2</div>
+                            <div class="stat-label">Corrigés</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Tous les devoirs</h2>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Devoir</th>
+                                        <th>Cours</th>
+                                        <th>Date limite</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${[
+                { title: 'Conception de maquettes', course: 'IHM', deadline: '20 fév 2026', status: 'urgent', statusLabel: 'Urgent', btnText: 'Soumettre' },
+                { title: 'Projet Spring Boot', course: 'Web', deadline: '23 fév 2026', status: 'pending', statusLabel: 'À rendre', btnText: 'Soumettre' },
+                { title: 'Analyse de sécurité', course: 'Sécurité', deadline: '25 fév 2026', status: 'pending', statusLabel: 'À rendre', btnText: 'Soumettre' },
+                { title: 'TP Docker', course: 'DevOps', deadline: '18 fév 2026', status: 'completed', statusLabel: 'Rendu ✓', btnText: 'Voir' },
+                { title: 'Design Patterns', course: 'Architecture', deadline: '15 fév 2026', status: 'graded', statusLabel: 'Note: 16/20', btnText: 'Voir note' }
+            ].map(item => `
+                                        <tr>
+                                            <td><strong>${item.title}</strong></td>
+                                            <td>${item.course}</td>
+                                            <td>${item.deadline}</td>
+                                            <td>
+                                                <span class="badge badge-${item.status === 'urgent' ? 'danger' : item.status === 'pending' ? 'warning' : item.status === 'completed' ? 'success' : 'info'}">
+                                                    ${item.statusLabel}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn ${item.status === 'urgent' || item.status === 'pending' ? 'btn-primary' : 'btn-outline'} btn-sm"
+                                                        onclick="${item.status === 'urgent' || item.status === 'pending' ? 'openModal(\'submitModal\')' : 'showToast(\'Détails du devoir\', \'info\')'}">
+                                                    ${item.btnText}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+        } else if (page === 'grades') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Mes Notes</h1>
+                        <p class="page-subtitle">Consultez vos résultats académiques</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">15.8/20</div>
+                                    <div class="stat-label">Moyenne générale</div>
+                                </div>
+                                <div class="stat-icon green">🎯</div>
+                            </div>
+                            <div class="stat-trend trend-up">⬆ +0.5 vs semestre dernier</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">18/20</div>
+                                    <div class="stat-label">Meilleure note</div>
+                                </div>
+                                <div class="stat-icon blue">⭐</div>
+                            </div>
+                            <div class="stat-trend">DevOps - TP Docker</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">4/6</div>
+                                    <div class="stat-label">Modules validés</div>
+                                </div>
+                                <div class="stat-icon orange">✓</div>
+                            </div>
+                            <div class="stat-trend">24 crédits acquis</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Détail des notes par cours</h2>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Cours</th>
+                                        <th>Devoir</th>
+                                        <th>Note</th>
+                                        <th>Moyenne classe</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${[
+                { course: 'DevOps', assignment: 'TP Docker', note: '18/20', avg: '14.5', color: '#28a745' },
+                { course: 'Architecture', assignment: 'Design Patterns', note: '16/20', avg: '13.2', color: '#28a745' },
+                { course: 'IHM', assignment: 'Prototype v1', note: '15/20', avg: '12.8', color: '#28a745' },
+                { course: 'Sécurité', assignment: 'Audit réseau', note: '14/20', avg: '13.5', color: '#ffc107' },
+                { course: 'IA', assignment: 'Algorithme ML', note: '17/20', avg: '14.1', color: '#28a745' },
+                { course: 'Web', assignment: 'API REST', note: 'En attente', avg: '-', color: '#6c757d' }
+            ].map(grade => `
+                                        <tr>
+                                            <td><strong>${grade.course}</strong></td>
+                                            <td>${grade.assignment}</td>
+                                            <td><strong style="color: ${grade.color};">${grade.note}</strong></td>
+                                            <td>${grade.avg}</td>
+                                            <td>
+                                                ${grade.note !== 'En attente' ?
+                '<button class="btn btn-outline btn-sm" onclick="showToast(\'📄 Consultation de la copie\', \'info\')">Voir copie</button>' :
+                '<span style="color: #6c757d; font-size: 0.875rem;">Correction en cours</span>'}
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+        }
+    }
+
+    // ==================== TEACHER CONTENT ====================
+    function getTeacherContent(page) {
+        if (page === 'dashboard') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Tableau de bord</h1>
+                        <p class="page-subtitle">Vue d'ensemble de votre activité d'enseignement</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">12</div>
+                                    <div class="stat-label">Devoirs à corriger</div>
+                                </div>
+                                <div class="stat-icon red">✏️</div>
+                            </div>
+                            <div class="stat-trend trend-up">⬆ 5 nouveaux aujourd'hui</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">4</div>
+                                    <div class="stat-label">Cours actifs</div>
+                                </div>
+                                <div class="stat-icon blue">📚</div>
+                            </div>
+                            <div class="stat-trend">85 étudiants au total</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">87%</div>
+                                    <div class="stat-label">Taux de rendu</div>
+                                </div>
+                                <div class="stat-icon green">📊</div>
+                            </div>
+                            <div class="stat-trend trend-up">⬆ +5% ce mois</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Actions rapides</h2>
+                        </div>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="openModal('newCourseModal')">➕ Nouveau cours</button>
+                            <button class="btn btn-success">📝 Nouveau devoir</button>
+                            <button class="btn btn-outline">📤 Ajouter une ressource</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Devoirs en attente de correction</h2>
+                            <button class="btn btn-outline btn-sm" onclick="loadPage('corrections')">Voir tout</button>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Devoir</th>
+                                        <th>Cours</th>
+                                        <th>Soumissions</th>
+                                        <th>Date limite</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${[
+                { title: 'Conception de maquettes', course: 'IHM', submitted: '18/22', deadline: '20 fév 2026', status: 'good' },
+                { title: 'Projet Spring Boot', course: 'Web', submitted: '12/28', deadline: '23 fév 2026', status: 'warning' },
+                { title: 'TP Docker', course: 'DevOps', submitted: '15/15', deadline: '18 fév 2026', status: 'good' }
+            ].map(item => `
+                                        <tr>
+                                            <td><strong>${item.title}</strong></td>
+                                            <td>${item.course}</td>
+                                            <td><span class="badge badge-${item.status === 'good' ? 'success' : 'warning'}">${item.submitted}</span></td>
+                                            <td>${item.deadline}</td>
+                                            <td><button class="btn btn-primary btn-sm" onclick="showToast('🎓 Correction du devoir ${item.title}', 'info')">Corriger</button></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+        } else if (page === 'courses') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Mes Cours</h1>
+                        <p class="page-subtitle">4 cours actifs - 85 étudiants</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <button class="btn btn-primary" onclick="openModal('newCourseModal')">➕ Créer un nouveau cours</button>
+                    </div>
+
+                    <div class="course-grid">
+                        ${[
+                { icon: '💻', title: 'Interface Homme-Machine', code: 'IHM-M2', students: 22, resources: 8, assignments: 3 },
+                { icon: '🌐', title: 'Technologies Web Avancées', code: 'WEB-M2', students: 28, resources: 12, assignments: 4 },
+                { icon: '🔧', title: 'DevOps & Cloud Computing', code: 'DEV-M2', students: 15, resources: 10, assignments: 2 },
+                { icon: '🏗️', title: 'Architecture des SI', code: 'ARCHI-M2', students: 20, resources: 9, assignments: 3 }
+            ].map(course => `
+                            <div class="course-card">
+                                <div class="course-header">
+                                    <div class="course-icon">${course.icon}</div>
+                                    <div class="course-title">${course.title}</div>
+                                    <div class="course-code">${course.code}</div>
+                                </div>
+                                <div class="course-body">
+                                    <div class="course-stats">
+                                        <div class="course-stat">
+                                            <span>👥</span>
+                                            <span>${course.students} étudiants</span>
+                                        </div>
+                                        <div class="course-stat">
+                                            <span>📄</span>
+                                            <span>${course.resources} ressources</span>
+                                        </div>
+                                        <div class="course-stat">
+                                            <span>📝</span>
+                                            <span>${course.assignments} devoirs</span>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                        <button class="btn btn-primary btn-sm" onclick="showToast('📊 Statistiques du cours', 'info')" style="flex: 1;">Stats</button>
+                                        <button class="btn btn-outline btn-sm" onclick="showToast('✏️ Modification du cours', 'info')" style="flex: 1;">Modifier</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+        } else if (page === 'corrections') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Corrections</h1>
+                        <p class="page-subtitle">32 travaux en attente</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Liste des soumissions</h2>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Étudiant</th>
+                                        <th>Devoir</th>
+                                        <th>Cours</th>
+                                        <th>Soumis le</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${[
+                { student: 'Mariama Seck', assignment: 'Conception maquettes', course: 'IHM', date: '18 fév', status: 'pending' },
+                { student: 'Amadou Diop', assignment: 'Conception maquettes', course: 'IHM', date: '18 fév', status: 'pending' },
+                { student: 'Fatou Sarr', assignment: 'TP Docker', course: 'DevOps', date: '17 fév', status: 'pending' },
+                { student: 'Omar Kane', assignment: 'API REST', course: 'Web', date: '16 fév', status: 'graded' },
+                { student: 'Aïssatou Ndiaye', assignment: 'Design Patterns', course: 'Archi', date: '15 fév', status: 'graded' }
+            ].map(item => `
+                                        <tr>
+                                            <td><strong>${item.student}</strong></td>
+                                            <td>${item.assignment}</td>
+                                            <td>${item.course}</td>
+                                            <td>${item.date}</td>
+                                            <td>
+                                                <span class="badge badge-${item.status === 'pending' ? 'warning' : 'success'}">
+                                                    ${item.status === 'pending' ? 'À corriger' : 'Corrigé'}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn ${item.status === 'pending' ? 'btn-primary' : 'btn-outline'} btn-sm"
+                                                        onclick="showToast('${item.status === 'pending' ? '✏️ Correction' : '📊 Note: 15/20'}', 'info')">
+                                                    ${item.status === 'pending' ? 'Corriger' : 'Voir note'}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+        } else if (page === 'students') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Mes Étudiants</h1>
+                        <p class="page-subtitle">85 étudiants au total</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Liste par cours</h2>
+                            <input type="text" class="search-input" placeholder="Rechercher un étudiant..." style="width: 250px;">
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom Prénom</th>
+                                        <th>Cours</th>
+                                        <th>Moyenne</th>
+                                        <th>Devoirs rendus</th>
+                                        <th>Présence</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${[
+                { name: 'Mariama Seck', course: 'IHM', avg: 15.8, submitted: '3/3', presence: '95%', color: '#28a745' },
+                { name: 'Amadou Diop', course: 'IHM', avg: 14.2, submitted: '3/3', presence: '90%', color: '#28a745' },
+                { name: 'Fatou Sarr', course: 'DevOps', avg: 16.5, submitted: '2/2', presence: '100%', color: '#28a745' },
+                { name: 'Omar Kane', course: 'Web', avg: 13.8, submitted: '3/4', presence: '85%', color: '#ffc107' },
+                { name: 'Aïssatou Ndiaye', course: 'Archi', avg: 17.2, submitted: '3/3', presence: '100%', color: '#28a745' }
+            ].map(student => `
+                                        <tr>
+                                            <td><strong>${student.name}</strong></td>
+                                            <td>${student.course}</td>
+                                            <td><strong style="color: ${student.color};">${student.avg}/20</strong></td>
+                                            <td>${student.submitted}</td>
+                                            <td>${student.presence}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+        }
+    }
+
+    // ==================== ADMIN CONTENT ====================
+    function getAdminContent(page) {
+        if (page === 'dashboard') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Dashboard Administrateur</h1>
+                        <p class="page-subtitle">Vue d'ensemble du système</p>
+                    </div>
+
+                    <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="stat-card" onclick="loadPage('users')" style="cursor: pointer;">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">342</div>
+                                    <div class="stat-label">Étudiants</div>
+                                </div>
+                                <div class="stat-icon blue">👨‍🎓</div>
+                            </div>
+                            <div class="stat-trend trend-up">⬆ +12 ce mois</div>
+                        </div>
+
+                        <div class="stat-card" onclick="loadPage('users')" style="cursor: pointer;">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">28</div>
+                                    <div class="stat-label">Enseignants</div>
+                                </div>
+                                <div class="stat-icon green">👨‍🏫</div>
+                            </div>
+                            <div class="stat-trend">12 départements</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">45</div>
+                                    <div class="stat-label">Cours actifs</div>
+                                </div>
+                                <div class="stat-icon orange">📚</div>
+                            </div>
+                            <div class="stat-trend">Ce semestre</div>
+                        </div>
+
+                        <div class="stat-card" onclick="loadPage('stats')" style="cursor: pointer;">
+                            <div class="stat-header">
+                                <div>
+                                    <div class="stat-value">84%</div>
+                                    <div class="stat-label">Taux de réussite</div>
+                                </div>
+                                <div class="stat-icon green">📊</div>
+                            </div>
+                            <div class="stat-trend trend-up">⬆ +3% vs année dernière</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Actions rapides</h2>
+                        </div>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="openModal('newUserModal')">👤 Nouvel utilisateur</button>
+                            <button class="btn btn-success" onclick="openModal('newDeptModal')">🏢 Nouveau département</button>
+                            <button class="btn btn-outline" onclick="showToast('📊 Export en cours...', 'info')">📥 Exporter rapport</button>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Évolution des inscriptions</h2>
+                            </div>
+                            <div style="height: 250px; padding: 1rem;">
+                                <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 100%; gap: 1rem;">
+                                    ${[285, 295, 310, 320, 330, 342].map((val, i) => `
+                                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;">
+                                            <div style="background: #003366; width: 100%; height: ${(val/342)*100}%; border-radius: 8px 8px 0 0; position: relative;">
+                                                <div style="position: absolute; top: -25px; width: 100%; text-align: center; font-size: 0.75rem; font-weight: 600;">${val}</div>
+                                            </div>
+                                            <div style="margin-top: 0.5rem; font-size: 0.875rem; color: #6c757d;">${['Sep', 'Oct', 'Nov', 'Déc', 'Jan', 'Fév'][i]}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Activités récentes</h2>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                ${[
+                { title: 'Nouvel étudiant', desc: 'Mariama Seck - il y a 1h', icon: '👨‍🎓' },
+                { title: 'Cours créé', desc: 'IHM - Pr. Diagne - il y a 3h', icon: '📚' },
+                { title: 'Département modifié', desc: 'Informatique - hier', icon: '🏢' }
+            ].map(activity => `
+                                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 12px;">
+                                        <div style="display: flex; gap: 1rem; align-items: start;">
+                                            <div style="font-size: 1.5rem;">${activity.icon}</div>
+                                            <div>
+                                                <div style="font-weight: 600; font-size: 0.9rem;">${activity.title}</div>
+                                                <div style="font-size: 0.8rem; color: #6c757d; margin-top: 0.25rem;">${activity.desc}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+        } else if (page === 'users') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Gestion des Utilisateurs</h1>
+                        <p class="page-subtitle">370 utilisateurs au total</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Tous les utilisateurs</h2>
+                            <div style="display: flex; gap: 1rem;">
+                                <select class="form-control" style="width: auto;">
+                                    <option>Tous les rôles</option>
+                                    <option>Étudiants</option>
+                                    <option>Enseignants</option>
+                                    <option>Admins</option>
+                                </select>
+                                <button class="btn btn-primary" onclick="openModal('newUserModal')">➕ Nouvel utilisateur</button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Email</th>
+                                        <th>Rôle</th>
+                                        <th>Département</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${[
+                { name: 'Mariama Seck', email: 'mariama.seck@etu.uchk.sn', role: 'Étudiant', dept: 'Informatique', status: 'Actif', roleType: 'info' },
+                { name: 'Pr. Ibrahima Diagne', email: 'i.diagne@uchk.sn', role: 'Enseignant', dept: 'Informatique', status: 'Actif', roleType: 'success' },
+                { name: 'Aïda Niang', email: 'a.niang@uchk.sn', role: 'Admin', dept: 'Administration', status: 'Actif', roleType: 'danger' },
+                { name: 'Amadou Diop', email: 'amadou.diop@etu.uchk.sn', role: 'Étudiant', dept: 'Mathématiques', status: 'Actif', roleType: 'info' },
+                { name: 'Dr. Fatou Kane', email: 'f.kane@uchk.sn', role: 'Enseignant', dept: 'Physique', status: 'Actif', roleType: 'success' }
+            ].map(user => `
+                                        <tr>
+                                            <td><strong>${user.name}</strong></td>
+                                            <td>${user.email}</td>
+                                            <td><span class="badge badge-${user.roleType}">${user.role}</span></td>
+                                            <td>${user.dept}</td>
+                                            <td><span class="badge badge-success">${user.status}</span></td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm" onclick="showToast('✏️ Modification de ${user.name}', 'info')">Modifier</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+        } else if (page === 'departments') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Départements</h1>
+                        <p class="page-subtitle">4 départements actifs</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <button class="btn btn-primary" onclick="openModal('newDeptModal')">➕ Créer un département</button>
+                    </div>
+
+                    <div class="course-grid">
+                        ${[
+                { name: 'Informatique', code: 'INFO', head: 'Pr. Diagne', students: 142, teachers: 8, courses: 18, color: '#003366' },
+                { name: 'Mathématiques', code: 'MATH', head: 'Pr. Sarr', students: 98, teachers: 6, courses: 14, color: '#004488' },
+                { name: 'Physique', code: 'PHYS', head: 'Dr. Kane', students: 65, teachers: 5, courses: 12, color: '#0055aa' },
+                { name: 'Chimie', code: 'CHIM', head: 'Dr. Ndiaye', students: 37, teachers: 4, courses: 10, color: '#0066cc' }
+            ].map(dept => `
+                            <div class="course-card">
+                                <div class="course-header" style="background: ${dept.color};">
+                                    <div class="course-icon">${dept.name[0]}</div>
+                                    <div class="course-title">${dept.name}</div>
+                                    <div class="course-code">${dept.code}</div>
+                                </div>
+                                <div class="course-body">
+                                    <p style="color: #6c757d; margin-bottom: 1rem;">Responsable: ${dept.head}</p>
+                                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                                        <div style="text-align: center;">
+                                            <div style="font-weight: 700; font-size: 1.25rem; color: ${dept.color};">${dept.students}</div>
+                                            <div style="font-size: 0.75rem; color: #6c757d;">Étudiants</div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-weight: 700; font-size: 1.25rem; color: ${dept.color};">${dept.teachers}</div>
+                                            <div style="font-size: 0.75rem; color: #6c757d;">Enseignants</div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-weight: 700; font-size: 1.25rem; color: ${dept.color};">${dept.courses}</div>
+                                            <div style="font-size: 0.75rem; color: #6c757d;">Cours</div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button class="btn btn-outline btn-sm" onclick="showToast('📊 Statistiques ${dept.name}', 'info')" style="flex: 1;">Statistiques</button>
+                                        <button class="btn btn-primary btn-sm" onclick="showToast('✏️ Modification ${dept.name}', 'info')" style="flex: 1;">Modifier</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+        } else if (page === 'stats') {
+            return `
+                    <div class="page-header">
+                        <h1 class="page-title">Statistiques Globales</h1>
+                        <p class="page-subtitle">Analyse complète du système</p>
+                    </div>
+
+                    <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr);">
+                        ${[
+                { title: 'Total Étudiants', value: '342', icon: '👨‍🎓', color: 'blue' },
+                { title: 'Total Enseignants', value: '28', icon: '👨‍🏫', color: 'green' },
+                { title: 'Total Cours', value: '45', icon: '📚', color: 'orange' },
+                { title: 'Taux de réussite', value: '84%', icon: '📊', color: 'green' },
+                { title: 'Satisfaction', value: '4.2/5', icon: '⭐', color: 'orange' }
+            ].map(stat => `
+                            <div class="stat-card">
+                                <div class="stat-icon ${stat.color}">${stat.icon}</div>
+                                <div class="stat-label">${stat.title}</div>
+                                <div class="stat-value">${stat.value}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Répartition par département</h2>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Département</th>
+                                        <th>Étudiants</th>
+                                        <th>Enseignants</th>
+                                        <th>Cours</th>
+                                        <th>Taux de réussite</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${[
+                { name: 'Informatique', students: 142, teachers: 8, courses: 18, success: '86%' },
+                { name: 'Mathématiques', students: 98, teachers: 6, courses: 14, success: '82%' },
+                { name: 'Physique', students: 65, teachers: 5, courses: 12, success: '85%' },
+                { name: 'Chimie', students: 37, teachers: 4, courses: 10, success: '80%' }
+            ].map(dept => `
+                                        <tr>
+                                            <td><strong>${dept.name}</strong></td>
+                                            <td>${dept.students}</td>
+                                            <td>${dept.teachers}</td>
+                                            <td>${dept.courses}</td>
+                                            <td><strong style="color: #28a745;">${dept.success}</strong></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+        }
+    }
+
+    // ==================== MODALS ====================
+    function openModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay:not(.hidden)').forEach(modal => {
+                closeModal(modal.id);
+            });
+        }
+    });
+
+    // ==================== ACTIONS ====================
+    function submitWork() {
+        closeModal('submitModal');
+        showToast('✅ Devoir soumis avec succès ! Modifiable jusqu\'au 20/02.', 'success');
+    }
+
+    function createCourse() {
+        closeModal('newCourseModal');
+        showToast('✅ Cours créé avec succès !', 'success');
+    }
+
+    function createUser() {
+        closeModal('newUserModal');
+        showToast('✅ Utilisateur créé avec succès !', 'success');
+    }
+
+    function createDept() {
+        closeModal('newDeptModal');
+        showToast('✅ Département créé avec succès !', 'success');
+    }
+
+    function showToast(message, type = 'success') {
+        const icons = {
+            success: '✓',
+            error: '✗',
+            info: 'ℹ'
+        };
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
+                <span class="toast-icon">${icons[type]}</span>
+                <span class="toast-message">${message}</span>
+            `;
+
+        document.getElementById('toastContainer').appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideOutRight 0.3s forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+</body>
+</html>
